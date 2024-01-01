@@ -4,9 +4,9 @@ const { isAuthenticatedUser } = require("../middleware/auth");
 const r = express.Router();
 
 
-r.route("/register").post(isAuthenticatedUser, registerUser);
+r.route("/register").post(registerUser);
 r.route("/login").post(loginUser);
-r.route("/logout").get(logoutUser);
+r.route("/logout").get(isAuthenticatedUser, logoutUser);
 
 
 module.exports = r

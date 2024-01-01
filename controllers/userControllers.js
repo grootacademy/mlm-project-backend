@@ -1,5 +1,6 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
 const User = require("../models/userModels");
+const Wallet = require("../models/wallet");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendToken = require("../utils/jwtToken");
 
@@ -13,13 +14,15 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler("You can't use invalid or duplicate emails.", 409));
     }
 
-
-
     const user = await User.create({
         name,
         email: email.toLowerCase(),
         password,
     });
+
+    await Wallet.create({
+        userRef: user._id
+    })
 
     sendToken(user, 201, res)
 });

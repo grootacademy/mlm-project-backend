@@ -5,7 +5,6 @@ const bcrypt = require("bcryptjs");
 
 const membershipSchema = mongoose.Schema({
     referralCode: String,
-    
     transactionId: {
         type: String,
         required: true,

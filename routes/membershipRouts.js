@@ -4,7 +4,6 @@ const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const { body } = require("express-validator");
 const r = express.Router();
 
-
 const membershipRequest = [
     body("transactionId", "Please provide me a valid transactionId").isLength({ min: 5 }),
     body("product_id", "Please give me a valid product_id").isLength({ min: 8 }),

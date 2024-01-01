@@ -32,13 +32,18 @@ exports.requestMembership = catchAsyncError(async (req, res, next) => {
     let MembershipId;
 
     if (parentReferralCode) {
-        const existmembership = await Membership.find({ referralCode: parentReferralCode });
+        const existmembership = await Membership.findOne({ referralCode: parentReferralCode }).populate("product");
 
-        if (existmembership.length > 0) {
+        if (existmembership) {
+            MembershipId = existmembership._id
 
-            MembershipId = existmembership[0]._id
+            // check if the referralCode is expired or not
+            if (calculateDaysElapsed(existmembership?.createdOn) >= existmembership.product.duration) {
+                await Membership.findByIdAndUpdate(MembershipId, { referralCode: null })
+                return next(new ErrorHandler(`Your parentReferralCode is expired`, 400));
+            }
 
-            const userRefId = existmembership[0].userRef;
+            const userRefId = existmembership.userRef;
 
             if (userRefId.equals(_id)) {
                 return next(new ErrorHandler(`Your parentReferralCode is not valid`, 409));

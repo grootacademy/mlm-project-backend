@@ -1,6 +1,6 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
 const User = require("../models/userModels");
-const Wallet = require("../models/wallet");
+const Wallet = require("../models/walletModels");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendToken = require("../utils/jwtToken");
 

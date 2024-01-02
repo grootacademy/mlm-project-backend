@@ -7,8 +7,7 @@ const Product = require("../models/productModel");
 const User = require("../models/userModels");
 const { calculateDaysElapsed } = require("../utils/timeElapsed");
 const Deposit = require("../models/deposit");
-const deposit = require("../models/deposit");
-const Wallet = require("../models/wallet");
+const Wallet = require("../models/walletModels");
 const ObjectId = require('mongodb').ObjectId;
 
 
@@ -86,7 +85,7 @@ exports.approvalOfMembership = catchAsyncError(async (req, res, next) => {
         referralCode: code,
         approvedStatus: "Approved",
         approvedOn: Date.now(),
-    }
+    };
 
     let membership = await Membership.findById(membershipId).select("approvedStatus");
 
@@ -197,4 +196,4 @@ async function earnedAmount(membershipId) {
     })
 
     return earnedAmount;
-}
+};

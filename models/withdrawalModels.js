@@ -15,7 +15,7 @@ const withdrawalSchema = mongoose.Schema({
     },
     approvedStatus: {
         type: String,
-        default: "pending",
+        default: "Pending",
     },
     createdOn: {
         type: Date,

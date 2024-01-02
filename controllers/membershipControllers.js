@@ -69,7 +69,7 @@ exports.requestMembership = catchAsyncError(async (req, res, next) => {
 });
 
 
-//Approval of membership
+//Approval of membership (admin only)
 exports.approvalOfMembership = catchAsyncError(async (req, res, next) => {
 
     const result = validationResult(req);
@@ -197,3 +197,44 @@ async function earnedAmount(membershipId) {
 
     return earnedAmount;
 };
+
+//get all memberships (admin only)
+exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    };
+
+    const { approvedStatus } = req.body;
+
+    let filterMemberships;
+    let memberships;
+
+    if (approvedStatus) {
+
+        filterMemberships = await Membership.find({ approvedStatus: approvedStatus });
+
+        if (filterMemberships[0] === undefined) {
+
+            return next(new ErrorHandler(`${approvedStatus} memberships note found`, 400));
+        } else if (!filterMemberships) {
+
+            return next(new ErrorHandler(`memberships note found`, 400));
+        };
+
+    } else if (!approvedStatus) {
+
+        memberships = await Membership.find();
+
+        if (!memberships) {
+            return next(new ErrorHandler("memberships note found", 400));
+        };
+    };
+
+    res.status(200).json({
+        memberships,
+        filterMemberships
+    });
+
+});

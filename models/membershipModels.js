@@ -22,7 +22,7 @@ const membershipSchema = mongoose.Schema({
     },
     approvedStatus: {
         type: String,
-        default: "pending",
+        default: "Pending",
     },
     parentMembershipId: {
         type: mongoose.Types.ObjectId

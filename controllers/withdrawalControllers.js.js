@@ -107,4 +107,79 @@ exports.approveWithdrawal = catchAsyncError(async (req, res, next) => {
 });
 
 // withdrawals request rejected
-exports
+exports.withdrawalRequestReject = catchAsyncError(async (req, res, next) => {
+
+    const { _id } = req.user;
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    };
+
+    const { withdrawalId } = req.body;
+
+    let withdrawal;
+    withdrawal = await Withdrawals.findOne({ _id: withdrawalId, approvedStatus: "Rejected" });
+
+    if (withdrawal) {
+        return next(new ErrorHandler("Request already Rejected", 400));
+    };
+
+    const newData = {
+        approvedOn: Date.now(),
+        approvedStatus: "Rejected",
+    };
+
+    withdrawal = await Withdrawals.findByIdAndUpdate(withdrawalId, newData, { new: true });
+
+    if (!withdrawal) {
+        return next(new ErrorHandler("Withdrawal request not updated", 400));
+    };
+
+    res.status(201).json({ withdrawal });
+
+});
+
+
+//get withdrawals list
+exports.getWithdrawalList = catchAsyncError(async (req, res, next) => {
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    };
+
+    const { approvedStatus } = req.body;
+
+    let filteredWithdrawals;
+    let withdrawals;
+
+    if (approvedStatus) {
+
+        filteredWithdrawals = await Withdrawals.find({ approvedStatus: approvedStatus });
+
+        if (filteredWithdrawals[0] === undefined) {
+
+            return next(new ErrorHandler(`${approvedStatus} withdrawals note found`, 400));
+        } else if (!filteredWithdrawals) {
+
+            return next(new ErrorHandler(`withdrawals note found`, 400));
+        }
+
+    } else if (!approvedStatus) {
+
+        withdrawals = await Withdrawals.find();
+
+        if (!withdrawals) {
+            return next(new ErrorHandler("withdrawals note found", 400));
+        };
+    }
+
+
+
+    res.status(200).json({ withdrawals, filteredWithdrawals });
+
+});
+

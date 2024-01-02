@@ -213,7 +213,7 @@ exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
 
     if (approvedStatus) {
 
-        filterMemberships = await Membership.find({ approvedStatus: approvedStatus });
+        filterMemberships = await Membership.find({ approvedStatus: approvedStatus }).populate("product");
 
         if (filterMemberships[0] === undefined) {
 
@@ -225,7 +225,7 @@ exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
 
     } else if (!approvedStatus) {
 
-        memberships = await Membership.find();
+        memberships = await Membership.find().populate("product");
 
         if (!memberships) {
             return next(new ErrorHandler("memberships note found", 400));

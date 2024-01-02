@@ -7,7 +7,7 @@ const withdrawalSchema = mongoose.Schema({
         default: 0
     },
     createdBy: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
     },
     approvedOn: {

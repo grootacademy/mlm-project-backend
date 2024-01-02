@@ -6,7 +6,7 @@ const walletSchema = mongoose.Schema({
         default: 0
     },
     userRef: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
         required: true,
         unique: true

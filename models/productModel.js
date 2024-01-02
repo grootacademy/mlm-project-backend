@@ -12,7 +12,7 @@ const productSchema = mongoose.Schema({
         required: [true, "Please enter the product duration"],
     },
     adminRef: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
     },
     createdAt: {

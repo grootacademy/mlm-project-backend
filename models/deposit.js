@@ -7,16 +7,16 @@ const depositSchema = mongoose.Schema({
         default: 0
     },
     createdBy: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
     },
     source: String,
     sourceId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "memberships"
     },
     walletId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "wallets"
     },
     createdOn: {

@@ -15,7 +15,7 @@ const membershipSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        default: "Active",
+        default: "active",
     },
     approvedOn: {
         type: Date,
@@ -25,16 +25,17 @@ const membershipSchema = mongoose.Schema({
         default: "Pending",
     },
     parentMembershipId: {
-        type: mongoose.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId
     },
     userRef: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users",
         required: true,
     },
     product: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "products",
+        strictPopulate: false,
     },
     createdOn: {
         type: Date,

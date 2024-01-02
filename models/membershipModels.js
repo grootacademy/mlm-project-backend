@@ -15,7 +15,7 @@ const membershipSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        default: "active",
+        default: "Active",
     },
     approvedOn: {
         type: Date,

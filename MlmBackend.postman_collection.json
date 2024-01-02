@@ -103,39 +103,12 @@
 					"response": []
 				},
 				{
-					"name": "product create",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"amount\":2000,\r\n    \"duration\":28\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4000/api/v1/create",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4000",
-							"path": [
-								"api",
-								"v1",
-								"create"
-							]
-						}
+					"name": "getAllUsers(admin)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
 					},
-					"response": []
-				},
-				{
-					"name": "getProducts",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -147,7 +120,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4000/api/v1/create",
+							"raw": "http://localhost:4000/api/v1/getAllUsers",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -156,7 +129,7 @@
 							"path": [
 								"api",
 								"v1",
-								"create"
+								"getAllUsers"
 							]
 						}
 					},
@@ -261,6 +234,110 @@
 					"response": []
 				},
 				{
+					"name": "getMemberships (admin)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"approvedStatus\":\"Pending\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/membership/getMemberships",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"membership",
+								"getMemberships"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "product create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":2000,\r\n    \"duration\":28\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProducts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":2000,\r\n    \"duration\":28\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "withdrawalls",
+			"item": [
+				{
 					"name": "withdrawal/request",
 					"request": {
 						"method": "POST",
@@ -363,7 +440,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"approvedStatus\":\"Approve\"\r\n}",
+							"raw": "{\r\n    \"approvedStatus\":\"Approved\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -382,40 +459,6 @@
 								"v1",
 								"withdrawal",
 								"getWithdrawalList"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getMemberships (admin)",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"approvedStatus\":\"Pending\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:4000/api/v1/membership/getMemberships",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "4000",
-							"path": [
-								"api",
-								"v1",
-								"membership",
-								"getMemberships"
 							]
 						}
 					},

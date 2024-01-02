@@ -3,6 +3,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const { validationResult } = require("express-validator");
 const Withdrawals = require("../models/withdrawalModels");
 const Wallet = require("../models/walletModels");
+const WalletModels = require("../models/walletModels");
 
 
 //Request for withdrawal
@@ -16,6 +17,16 @@ exports.withdrawalRequest = catchAsyncError(async (req, res, next) => {
     }
 
     const { amount } = req.body;
+
+    const wallet = await WalletModels.findOne({ userRef: _id });
+
+    if (!wallet) {
+        return next(new ErrorHandler("Wallet not found", 404));
+    };
+
+    if (wallet.amount < amount) {
+        return next(new ErrorHandler("Insufficient balance", 400));
+    };
 
     let withdrawal = await Withdrawals.findOne({ createdBy: _id, approvedStatus: "Pending" });
 
@@ -50,11 +61,19 @@ exports.approveWithdrawal = catchAsyncError(async (req, res, next) => {
 
     const { withdrawalId } = req.body;
 
-    let withdrawal = await Withdrawals.findOne({ _id: withdrawalId, approvedStatus: "Approved" });
+    let withdrawal;
+    withdrawal = await Withdrawals.findOne({ _id: withdrawalId, approvedStatus: "Rejected" });
+
+    if (withdrawal) {
+        return next(new ErrorHandler("Request already Rejected", 400));
+    };
+
+    withdrawal = await Withdrawals.findOne({ _id: withdrawalId, approvedStatus: "Approved" });
+
 
     if (withdrawal) {
         return next(new ErrorHandler("Request already Approved", 400));
-    }
+    };
 
     const newData = {
         approvedOn: Date.now(),
@@ -86,3 +105,6 @@ exports.approveWithdrawal = catchAsyncError(async (req, res, next) => {
         wallet
     });
 });
+
+// withdrawals request rejected
+exports

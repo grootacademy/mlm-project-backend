@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4134d58e-317e-4aef-937b-01c76e3b138b",
+		"_postman_id": "42e57a1c-8da4-43e9-acb0-9f5b785e51f3",
 		"name": "MlmBackend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "18684798"
+		"_exporter_id": "29807040"
 	},
 	"item": [
 		{
@@ -131,6 +131,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "getProducts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":2000,\r\n    \"duration\":28\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"create"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -144,7 +174,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"transactionId\":\"skjdfhisfdsfdfd\",\r\n    \"upiId\":\"swami\",\r\n    \"product_id\":\"65915e74053af19ed8944f35\",\r\n    \"parentReferralCode\": \"57awhwt07x7\"\r\n}",
+							"raw": "{\r\n    \"transactionId\":\"skjdfhisfdsfdfjsld\",\r\n    \"upiId\":\"swami\",\r\n    \"product_id\":\"65915e74053af19ed8944f35\"\r\n    // \"parentReferralCode\": \"57awhwt07x7\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -175,7 +205,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"membershipId\":\"6591cd8e05053566310359df\"\r\n}",
+							"raw": "{\r\n    \"membershipId\":\"659303c62b9deda7dc936c7a\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -225,6 +255,68 @@
 								"v1",
 								"membership",
 								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "withdrawal/request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":\"65926a40e7c0144dfe2af6cf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/withdrawal/request",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"withdrawal",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "withdrawal approval request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"withdrawalId\":\"6592f0784536f20f07d7831a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/withdrawal/approve",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"withdrawal",
+								"approve"
 							]
 						}
 					},

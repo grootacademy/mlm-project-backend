@@ -4,7 +4,7 @@ const { registerProduct, getAllProducts } = require("../controllers/productContr
 const r = express.Router();
 
 r.route("/create").post(isAuthenticatedUser, authorizeRoles("admin"), registerProduct);
-r.route("/getProducts").get(isAuthenticatedUser, getAllProducts);
+r.route("/getProducts").get(getAllProducts);
 
 
 module.exports = r;

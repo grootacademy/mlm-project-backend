@@ -25,4 +25,6 @@ r.route("/membership/complete").put(isAuthenticatedUser, isMembershipId, complet
 
 r.route("/membership/getMemberships").get(isAuthenticatedUser, authorizeRoles("admin"), isApprovedStatus, getAllMemberships);
 
+r.route("/memberships/user").get(isAuthenticatedUser, isApprovedStatus, getAllMemberships);
+
 module.exports = r;

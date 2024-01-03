@@ -9,6 +9,7 @@ const { calculateDaysElapsed } = require("../utils/timeElapsed");
 const Deposit = require("../models/deposit");
 const Wallet = require("../models/walletModels");
 const ObjectId = require('mongodb').ObjectId;
+const circularJson = require('circular-json');
 
 
 //membership request
@@ -201,40 +202,42 @@ async function earnedAmount(membershipId) {
 //get all memberships (admin only)
 exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
 
-    const result = validationResult(req);
-    if (!result.isEmpty()) {
-        return res.send({ errors: result.array() });
-    };
+    try {
 
-    const { approvedStatus } = req.body;
-
-    let filterMemberships;
-    let memberships;
-
-    if (approvedStatus) {
-
-        filterMemberships = await Membership.find({ approvedStatus: approvedStatus }).populate("product");
-
-        if (filterMemberships[0] === undefined) {
-
-            return next(new ErrorHandler(`${approvedStatus} memberships note found`, 400));
-        } else if (!filterMemberships) {
-
-            return next(new ErrorHandler(`memberships note found`, 400));
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.send({ errors: result.array() });
         };
 
-    } else if (!approvedStatus) {
+        const { _id } = req.user
 
-        memberships = await Membership.find().populate("product");
+        let memberships;
 
-        if (!memberships) {
-            return next(new ErrorHandler("memberships note found", 400));
-        };
-    };
+        memberships = await Membership.find({ userRef: _id }).populate({ path: "product", options: { lean: true } }).lean();
 
-    res.status(200).json({
-        memberships,
-        filterMemberships
-    });
+        // memberships = memberships.map(membership => membership.toObject());
 
+        memberships = memberships.map(async (membership, i) => {
+            let count = await Membership.find({ parentMembershipId: membership._id }).countDocuments();
+            membership.addedMembers = count;
+            return membership;
+        })
+
+        memberships = await Promise.all(memberships)
+        // addMemberCountToArray(memberships)
+
+        res.status(200).json(memberships);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
 });
+
+// const addMemberCountToArray = (memberships) => {
+//     return memberships.map((membership) => {
+//         let count = aw Membership.find({ parentMembershipId: membership._id }).countDocuments()
+//         // membership.addedMembers = JSON.stringify(count);
+//         console.log(count)
+//         return membership;
+//     })
+// }

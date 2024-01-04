@@ -1,4 +1,5 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
+const { validationResult } = require("express-validator");
 const User = require("../models/userModels");
 const Wallet = require("../models/walletModels");
 const ErrorHandler = require("../utils/ErrorHandler");
@@ -59,6 +60,37 @@ exports.getAllUsers = catchAsyncError(async (req, res, next) => {
         success: true,
         users
     });
+});
+
+//resat passwoard for user 
+exports.resetPassword = catchAsyncError(async (req, res, next) => {
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    }
+
+    const { _id } = req.user;
+
+    const { currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(_id).select("+password");
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+
+    if (!isMatch) {
+        return next(new ErrorHandler("User current password does not match", 404));
+    }
+
+    user.password = newPassword;
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: user.name });
 });
 
 //logout user 

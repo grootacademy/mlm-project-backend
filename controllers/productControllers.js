@@ -3,6 +3,7 @@ const Membership = require("../models/membershipModels");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Product = require("../models/productModel");
 const User = require("../models/userModels");
+const { validationResult } = require("express-validator");
 
 //register product
 exports.registerProduct = catchAsyncError(async (req, res, next) => {
@@ -26,13 +27,55 @@ exports.registerProduct = catchAsyncError(async (req, res, next) => {
     });
 });
 
+// Update product-- Admin
+exports.updateProduct = catchAsyncError(async (req, res, next) => {
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    };
+
+    let products = await Product.findById(req.params.id);
+
+    if (!products) {
+        return next(new ErrorHandler(`product not found of this Id:${req.params.id}`, 404));
+    }
+    products = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true, runValidators: true, useFindAndModify: false
+    });
+
+    res.status(200).json({
+        success: true,
+        data: products
+    });
+});
+
 
 //get all products
-exports.getAllProducts = catchAsyncError(async(req,res,next)=>{
-    
+exports.getAllProducts = catchAsyncError(async (req, res, next) => {
+
     const products = await Product.find();
     res.status(200).json({
         products
+    });
+
+});
+
+// Delete product-- Admin
+exports.deleteProduct = catchAsyncError(async (req, res, next) => {
+
+    const productId = req.params.id;
+
+    const result = await Product.deleteOne({ _id: productId });
+
+    if (result.deletedCount === 0) {
+        return next(new ErrorHandler("product not found", 404));
+    };
+
+    res.status(200).json({
+        success: true,
+        message: 'Product deleted successfully'
     });
 
 });

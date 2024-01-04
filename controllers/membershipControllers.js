@@ -1,12 +1,12 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
-const { genretReferralCode } = require("../utils/ReferralCode");
+const { generateReferralCode } = require("../utils/ReferralCode");
 const { validationResult } = require("express-validator");
 const Membership = require("../models/membershipModels");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Product = require("../models/productModel");
 const User = require("../models/userModels");
 const { calculateDaysElapsed } = require("../utils/timeElapsed");
-const Deposit = require("../models/deposit");
+const Deposit = require("../models/depositModels");
 const Wallet = require("../models/walletModels");
 const ObjectId = require('mongodb').ObjectId;
 
@@ -52,7 +52,7 @@ exports.requestMembership = catchAsyncError(async (req, res, next) => {
         }
     }
 
-    const code = genretReferralCode();
+    const code = generateReferralCode();
 
     const membership = await Membership.create({
         transactionId: transactionId,
@@ -64,7 +64,8 @@ exports.requestMembership = catchAsyncError(async (req, res, next) => {
     });
 
     res.status(200).json({
-        membership
+        success: true,
+        data: membership,
     });
 });
 
@@ -80,7 +81,7 @@ exports.approvalOfMembership = catchAsyncError(async (req, res, next) => {
 
     const { membershipId } = req.body;
 
-    const code = genretReferralCode();
+    const code = generateReferralCode();
     const newdata = {
         referralCode: code,
         approvedStatus: "Approved",
@@ -96,6 +97,7 @@ exports.approvalOfMembership = catchAsyncError(async (req, res, next) => {
     if (membership.approvedStatus === "Rejected") {
         return next(new ErrorHandler(`Membership already Rejected`, 400));
     }
+    console.log(membership)
 
     membership = await Membership.findByIdAndUpdate(membershipId, newdata, { new: true });
 
@@ -104,8 +106,51 @@ exports.approvalOfMembership = catchAsyncError(async (req, res, next) => {
     }
 
     res.status(201).json({
-        membership
+        success: true,
+        data: membership,
     });
+});
+
+//Rejeact membership (admin only)
+exports.rejectMembership = catchAsyncError(async (req, res, next) => {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    }
+
+    const { membershipId } = req.body;
+
+    const newdata = {
+        approvedStatus: "Rejected",
+        approvedOn: Date.now(),
+    };
+
+    let membership = await Membership.findById(membershipId).select("approvedStatus");
+
+    console.log(membership.approvedStatus)
+
+    // Check if membership already approved or rejected
+    if (membership.approvedStatus === "Approved") {
+        return next(new ErrorHandler(`Membership already approved`, 400));
+    }
+
+    if (membership.approvedStatus === "Rejected") {
+        return next(new ErrorHandler(`Membership already Rejected`, 400));
+    }
+
+
+    membership = await Membership.findByIdAndUpdate(membershipId, newdata, { new: true });
+
+    if (!membership) {
+        return next(new ErrorHandler(`Membership not found this Id: ${membershipId}`, 404));
+    }
+
+    res.status(201).json({
+        success: true,
+        data: membership,
+    });
+
 });
 
 //Complete membership
@@ -165,6 +210,10 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
 
     let wallet = await Wallet.findOne({ userRef: _id });
 
+    if (!wallet) {
+        return next(new ErrorHandler(`wallet note found`, 404));
+    }
+
     // Create a deposit history.
     await Deposit.create({
         totalAmount: totalAmount,
@@ -178,7 +227,8 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
     await Wallet.findByIdAndUpdate(wallet._id, { amount: wallet.amount + totalAmount })
 
     res.status(201).json({
-        membership
+        success: true,
+        data: membership,
     });
 });
 
@@ -233,8 +283,8 @@ exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
     };
 
     res.status(200).json({
-        memberships,
-        filterMemberships
+        success: true,
+        data: memberships || filterMemberships,
     });
 
 });

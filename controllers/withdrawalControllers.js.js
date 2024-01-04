@@ -106,7 +106,7 @@ exports.approveWithdrawal = catchAsyncError(async (req, res, next) => {
     });
 });
 
-// withdrawals request rejected
+// withdrawals request rejected (admin only)
 exports.withdrawalRequestReject = catchAsyncError(async (req, res, next) => {
 
     const { _id } = req.user;
@@ -142,7 +142,7 @@ exports.withdrawalRequestReject = catchAsyncError(async (req, res, next) => {
 });
 
 
-//get withdrawals list
+//get withdrawals list (admin only)
 exports.getWithdrawalList = catchAsyncError(async (req, res, next) => {
 
     const result = validationResult(req);
@@ -177,9 +177,20 @@ exports.getWithdrawalList = catchAsyncError(async (req, res, next) => {
         };
     }
 
+    res.status(200).json({
+        success: true,
+        data: withdrawals || filteredWithdrawals
+    });
+
+});
 
 
-    res.status(200).json({ withdrawals, filteredWithdrawals });
+//withdrawals list panding request 
+exports.withdrawalRequest = catchAsyncError(async (req, res, next) => {
+    const { _id } = req.user;
 
+
+
+    const walletModels = await Withdrawals.find({ approvedStatus: "Approved" })
 });
 

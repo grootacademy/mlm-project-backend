@@ -14,12 +14,14 @@ const memberdhip = require("./routes/membershipRouts");
 const Product = require("./routes/productRouts");
 const Wallet = require("./routes/walletRouts");
 const Withdrawal = require("./routes/withdrawalRouts");
+const Deposit = require("./routes/depositRouts");
 
 app.use("/api/v1", user);
 app.use("/api/v1", memberdhip);
 app.use("/api/v1", Product);
 app.use("/api/v1", Wallet);
 app.use("/api/v1", Withdrawal);
+app.use("/api/v1", Deposit);
 
 //Middleware for Error
 app.use(ErrorMiddleware);

@@ -203,6 +203,37 @@
 					"response": []
 				},
 				{
+					"name": "membership/rejecte(admin) Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"membershipId\":\"659303c62b9deda7dc936c7a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/membership/approval",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"membership",
+								"approval"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "complete membership",
 					"request": {
 						"method": "PUT",
@@ -327,6 +358,76 @@
 								"api",
 								"v1",
 								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product (admin)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":10000,\r\n    \"duration\":30\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/product/update/6593e2913773a97a48578966",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"update",
+								"6593e2913773a97a48578966"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product/delete (admin)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\":10000,\r\n    \"duration\":10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/product/update/?id=659403ffabb143141ec62ea3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"product",
+								"update",
+								""
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "659403ffabb143141ec62ea3"
+								}
 							]
 						}
 					},
@@ -461,6 +562,32 @@
 								"getWithdrawalList"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "getuserWallet",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TransactionHistory",
+			"item": [
+				{
+					"name": "/user/transactionHistory",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}

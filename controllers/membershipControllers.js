@@ -284,6 +284,33 @@ exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
 });
 
 //get all memberships (user)
+exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
+
+    try {
+
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.send({ errors: result.array() });
+        };
+
+        const id = req.params.id
+
+        const membership = await Membership.findById(id).populate("product userRef").lean();
+
+        // Add earned amount in this membership
+        membership.earnedAmount = await earnedAmount();
+
+        // Add total member added in this membership
+        membership.addedMembers = await Membership.find({ parentMembershipId: membership._id }).countDocuments();
+
+        res.status(200).json(membership);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+});
+
+//get all memberships (user)
 exports.getAllMembershipsForAdmin = catchAsyncError(async (req, res, next) => {
 
     try {

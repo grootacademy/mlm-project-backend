@@ -12,7 +12,6 @@ process.on("uncaughtException", (error) => {
 dotenv.config({ path: "config/.env" });
 
 const app = require("./app");
-const connectDb = require("./config/database");
 
 //Connect to Database
 connectDb();

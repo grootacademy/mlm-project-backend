@@ -4,7 +4,7 @@ const ErrorMiddleware = require("./middleware/Error");
 const cors = require("cors");
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_URI, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -25,6 +25,5 @@ app.use("/api/v1", Deposit);
 
 //Middleware for Error
 app.use(ErrorMiddleware);
-
 
 module.exports = app;

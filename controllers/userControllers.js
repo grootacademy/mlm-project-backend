@@ -6,12 +6,18 @@ const sendToken = require("../utils/jwtToken");
 
 //Register a user
 exports.registerUser = catchAsyncError(async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
     const existEmail = await User.findOne({ email: email.toLowerCase() });
 
     if (existEmail) {
         return next(new ErrorHandler("You can't use invalid or duplicate emails.", 409));
+    }
+
+    const existPhone = await User.findOne({ email: phone.toLowerCase() });
+
+    if (existPhone) {
+        return next(new ErrorHandler("You can't use invalid or duplicate phone.", 409));
     }
 
     const user = await User.create({

@@ -4,7 +4,7 @@ const ErrorMiddleware = require("./middleware/Error");
 const cors = require("cors");
 const app = express();
 
-app.use(cors({ origin: "http://localhost:3030", credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND_URI, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 

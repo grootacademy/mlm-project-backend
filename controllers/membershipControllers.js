@@ -199,7 +199,7 @@ async function earnedAmount(membershipId) {
     return earnedAmount;
 };
 
-//get all memberships (admin only)
+//get all memberships (user)
 exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
 
     try {
@@ -233,11 +233,20 @@ exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
     }
 });
 
-// const addMemberCountToArray = (memberships) => {
-//     return memberships.map((membership) => {
-//         let count = aw Membership.find({ parentMembershipId: membership._id }).countDocuments()
-//         // membership.addedMembers = JSON.stringify(count);
-//         console.log(count)
-//         return membership;
-//     })
-// }
+//get all memberships (user)
+exports.getAllMembershipsForAdmin = catchAsyncError(async (req, res, next) => {
+
+    try {
+
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.send({ errors: result.array() });
+        };
+
+        let memberships = await Membership.find().populate("product userRef").lean();
+        res.status(200).json(memberships);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message })
+    }
+});

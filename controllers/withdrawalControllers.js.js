@@ -13,7 +13,7 @@ exports.withdrawalRequest = catchAsyncError(async (req, res, next) => {
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
-        return res.status(401).send({ errors: result.array() });
+        return res.status(400).send({ errors: result.array() });
     }
 
     const { amount } = req.body;

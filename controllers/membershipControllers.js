@@ -185,7 +185,7 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
     };
 
     // Calculate Earned amount of membership
-    const EA = await earnedAmount(membershipId)
+    const { earnedAmount: EA } = await earnedAmount(membershipId)
 
     // Calculate time elapsed since its creation.
     const daysElpsed = calculateDaysElapsed(membership.createdOn)
@@ -253,18 +253,18 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
 
 async function earnedAmount(membershipId) {
     // we are assuming this membership exists
-    const memberships = await Membership.find({ parentMembershipId: membershipId, approvedStatus: "Approved" }).populate("product");
-    if (memberships.length === 0) {
+    const childMemberships = await Membership.find({ parentMembershipId: membershipId, approvedStatus: "Approved" }).populate("product userRef");
+    if (childMemberships.length === 0) {
         return 0;
     }
 
     let earnedAmount = 0;
 
-    memberships?.forEach(membership => {
+    childMemberships?.forEach(membership => {
         earnedAmount += membership?.product?.amount * 0.25;
     })
 
-    return earnedAmount;
+    return { earnedAmount, childMemberships };
 };
 
 //get all memberships (user)
@@ -315,8 +315,12 @@ exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
 
         const membership = await Membership.findById(id).populate("product userRef").lean();
 
+        if (!membership) {
+            return next(new ErrorHandler(`Membership not found this Id: ${id}`, 404));
+        };
+
         // Add earned amount in this membership
-        membership.earnedAmount = await earnedAmount();
+        membership = { ...membership, ...await earnedAmount(id) }
 
         // Add total member added in this membership
         membership.addedMembers = await Membership.find({ parentMembershipId: membership._id }).countDocuments();

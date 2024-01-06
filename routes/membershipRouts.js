@@ -1,5 +1,5 @@
 const express = require("express");
-const { requestMembership, approvalOfMembership, completeMembership, getAllMemberships, rejectMembership } = require("../controllers/membershipControllers");
+const { requestMembership, approvalOfMembership, completeMembership, getAllMemberships, getAllMembershipsForAdmin, rejectMembership, getMembershipDetails } = require("../controllers/membershipControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 const { body } = require("express-validator");
 const r = express.Router();
@@ -25,6 +25,9 @@ r.route("/membership/complete").put(isAuthenticatedUser, isMembershipId, complet
 
 r.route("/membership/rejecte").put(isAuthenticatedUser, authorizeRoles("admin"), isMembershipId, rejectMembership);
 
-r.route("/membership/getMemberships").get(isAuthenticatedUser, authorizeRoles("admin"), isApprovedStatus, getAllMemberships);
+r.route("/membership/getMemberships").get(isAuthenticatedUser, authorizeRoles("admin"), isApprovedStatus, getAllMembershipsForAdmin);
+
+r.route("/memberships/user").get(isAuthenticatedUser, isApprovedStatus, getAllMemberships);
+r.route("/membership/:id").get(isAuthenticatedUser, isApprovedStatus, getMembershipDetails);
 
 module.exports = r;

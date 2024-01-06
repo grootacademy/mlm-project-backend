@@ -8,6 +8,13 @@ const Membership = require("../models/membershipModels");
 
 //Register a user
 exports.registerUser = catchAsyncError(async (req, res, next) => {
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+        return next(new ErrorHandler(result.array()[0].msg, 400));
+    }
+
     const { name, email, password, phone } = req.body;
 
     const existEmail = await User.findOne({ email: email.toLowerCase() });
@@ -16,7 +23,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler("You can't use invalid or duplicate emails.", 409));
     }
 
-    const existPhone = await User.findOne({ email: phone.toLowerCase() });
+    const existPhone = await User.findOne({ phone: phone });
 
     if (existPhone) {
         return next(new ErrorHandler("You can't use invalid or duplicate phone.", 409));
@@ -26,6 +33,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         name,
         email: email.toLowerCase(),
         password,
+        phone: phone,
     });
 
     await Wallet.create({

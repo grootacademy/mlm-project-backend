@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
         minLength: [8, "Password should be greater than 8 characters"],
         select: false,
     },
+    phone: {
+        type: Number,
+    },
     role: {
         type: String,
         default: "user",
@@ -51,6 +54,11 @@ userSchema.pre("save", async function (next) {
     }
     this.password = await bcrypt.hash(this.password, 10);
 });
+
+userSchema.path('phone').validate(function (value) {
+    return value > 999999999;
+}, 'Invalid phone number');
+
 
 userSchema.methods.getJwtToken = function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE })

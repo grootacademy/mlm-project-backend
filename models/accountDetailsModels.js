@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 const accountDetailsSchema = new mongoose.Schema({
+    name: {
+        type: String,
+    },
     accountNumber: {
         type: String,
         required: true

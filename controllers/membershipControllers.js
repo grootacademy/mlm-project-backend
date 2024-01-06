@@ -257,7 +257,8 @@ async function earnedAmount(membershipId) {
         return 0;
     }
     // we are assuming this membership exists
-    const childMemberships = await Membership.find({ parentMembershipId: membershipId, approvedStatus: "Approved" }).populate("product userRef");
+    const childMemberships = await Membership.find({ parentMembershipId: membershipId }).populate("product userRef");
+
     if (childMemberships.length === 0) {
         return 0;
     }
@@ -265,7 +266,9 @@ async function earnedAmount(membershipId) {
     let earnedAmount = 0;
 
     childMemberships?.forEach(membership => {
-        earnedAmount += membership?.product?.amount * 0.25;
+        if (approvedStatus == "Approved") {
+            earnedAmount += membership?.product?.amount * 0.25;
+        }
     })
 
     return { earnedAmount, childMemberships };

@@ -266,7 +266,7 @@ async function earnedAmount(membershipId) {
     let earnedAmount = 0;
 
     childMemberships?.forEach(membership => {
-        if (approvedStatus == "Approved") {
+        if (membership?.approvedStatus == "Approved") {
             earnedAmount += membership?.product?.amount * 0.25;
         }
     })

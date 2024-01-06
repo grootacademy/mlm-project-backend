@@ -330,6 +330,12 @@ exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
             return next(new ErrorHandler(`Membership not found this Id: ${id}`, 404));
         };
 
+        let deposit = await Deposit.findOne({ sourceId: id, source: "membership" })
+
+        if (deposit) {
+            membership.deposit = deposit;
+        }
+
         // Add earned amount in this membership
         membership = { ...membership, ...await earnedAmount(id) }
 

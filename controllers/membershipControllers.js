@@ -336,6 +336,8 @@ exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
             membership.deposit = deposit;
         }
 
+        
+
         // Add earned amount in this membership
         membership = { ...membership, ...await earnedAmount(id) }
 

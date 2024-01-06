@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "42e57a1c-8da4-43e9-acb0-9f5b785e51f3",
+		"_postman_id": "736e258e-898a-438f-9290-5e4102716815",
 		"name": "MlmBackend",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29807040"
@@ -366,8 +366,11 @@
 				},
 				{
 					"name": "getProducts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -379,7 +382,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:4000/api/v1/create",
+							"raw": "http://localhost:4000/api/v1/getProducts",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -388,7 +391,7 @@
 							"path": [
 								"api",
 								"v1",
-								"create"
+								"getProducts"
 							]
 						}
 					},
@@ -605,7 +608,10 @@
 					"name": "getuserWallet",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
@@ -618,7 +624,190 @@
 					"name": "/user/transactionHistory",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "found user withdrawalHistory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/found/withdrawalHistory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"found",
+								"withdrawalHistory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "found user depositsHistory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/v1/found/withdrawalHistory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"found",
+								"withdrawalHistory"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account Details",
+			"item": [
+				{
+					"name": "add user Account Details",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"swami\",\r\n    \"accountNumber\":\"234629878937523\",\r\n    \"ifscCode\":\"HDFC0006740\",\r\n    \"accountType\":\"Savings account\",\r\n    \"bankName\":\"HDFC\",\r\n    \"branch\":\"jaipur\",\r\n    \"phoneNo\":\"9024984537\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/Account/Details",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"Account",
+								"Details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAccount",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"swami\",\r\n    \"accountNumber\":\"234629878937523\",\r\n    \"ifscCode\":\"HDFC0006740\",\r\n    \"accountType\":\"Savings account\",\r\n    \"bankName\":\"HDFC\",\r\n    \"branch\":\"jaipur\",\r\n    \"phoneNo\":\"9024984537\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/getAccount/659982d5c9f60058b1d666ca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"getAccount",
+								"659982d5c9f60058b1d666ca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user account update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"swami\",\r\n    \"accountNumber\":\"23462987873495374\",\r\n    \"ifscCode\":\"HDFC0006740\",\r\n    \"accountType\":\"Savings account\",\r\n    \"bankName\":\"HDFC\",\r\n    \"branch\":\"jaipur\",\r\n    \"phoneNo\":\"9024984538\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/account/update/659982d5c9f60058b1d666ca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"account",
+								"update",
+								"659982d5c9f60058b1d666ca"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllAccounts (admin)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"swami\",\r\n    \"accountNumber\":\"23462987873495374\",\r\n    \"ifscCode\":\"HDFC0006740\",\r\n    \"accountType\":\"Savings account\",\r\n    \"bankName\":\"HDFC\",\r\n    \"branch\":\"jaipur\",\r\n    \"phoneNo\":\"9024984538\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/v1/getAllAccounts/659982d5c9f60058b1d666ca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"v1",
+								"getAllAccounts",
+								"659982d5c9f60058b1d666ca"
+							]
+						}
 					},
 					"response": []
 				}

@@ -25,7 +25,7 @@ const accountDetailsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: {
+    phoneNo: {
         type: Number,
         required: [true, "number is required"],
     },
@@ -48,6 +48,10 @@ accountDetailsSchema.path("accountNumber").validate((accountNumber) => {
     const accountRegex = /^[0-9]{8,20}$/;
     return accountRegex.test(accountNumber);
 }, "Invalid account number");
+
+accountDetailsSchema.path("phoneNo").validate((phoneNo) => {
+    return phoneNo > 999999999;
+}, "Invalid phoneNo");
 
 
 

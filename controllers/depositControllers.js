@@ -23,3 +23,37 @@ exports.transactionHistory = catchAsyncError(async (req, res, next) => {
         data: transections,
     });
 });
+
+//withdrawal history
+exports.withdrawalHistory = catchAsyncError(async (req, res, next) => {
+    const { _id } = req.user;
+
+    const withdrawal = await Withdrawal.find({ createdBy: _id });
+
+    if (!withdrawal) {
+        return next(new ErrorHandler("Withdrawal history not found", 404));
+    };
+
+    res.status(200).json({
+        success: true,
+        data: withdrawal,
+        message: "Withdrawal history found successfully",
+    });
+});
+
+//deposits history
+exports.depositsHistory = catchAsyncError(async (req, res, next) => {
+    const { _id } = req.user;
+
+    const deposits = await Deposit.find({ createdBy: _id });
+
+    if (!deposits) {
+        return next(new ErrorHandler("Deposit history not found", 404));
+    };
+
+    res.status(200).json({
+        success: true,
+        data: deposits,
+        message: "Deposit history found successfully",
+    });
+});

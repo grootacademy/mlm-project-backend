@@ -17,7 +17,7 @@ exports.requestMembership = catchAsyncError(async (req, res, next) => {
     const result = validationResult(req);
 
     if (!result.isEmpty()) {
-        return res.send({ errors: result.array() });
+        return res.status(401).send({ errors: result.array() });
     }
 
     const { _id } = req.user;

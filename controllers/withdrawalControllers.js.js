@@ -184,13 +184,3 @@ exports.getWithdrawalList = catchAsyncError(async (req, res, next) => {
 
 });
 
-
-//withdrawals list panding request 
-exports.withdrawalRequest = catchAsyncError(async (req, res, next) => {
-    const { _id } = req.user;
-
-
-
-    const walletModels = await Withdrawals.find({ approvedStatus: "Approved" })
-});
-

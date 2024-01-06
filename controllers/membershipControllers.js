@@ -1,11 +1,11 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
 const { generateReferralCode } = require("../utils/ReferralCode");
+const { calculateDaysElapsed } = require("../utils/timeElapsed");
 const { validationResult } = require("express-validator");
 const Membership = require("../models/membershipModels");
 const ErrorHandler = require("../utils/ErrorHandler");
 const Product = require("../models/productModel");
 const User = require("../models/userModels");
-const { calculateDaysElapsed } = require("../utils/timeElapsed");
 const Deposit = require("../models/depositModels");
 const Wallet = require("../models/walletModels");
 const ObjectId = require('mongodb').ObjectId;
@@ -98,7 +98,7 @@ exports.approvalOfMembership = catchAsyncError(async (req, res, next) => {
     if (membership.approvedStatus === "Rejected") {
         return next(new ErrorHandler(`Membership already Rejected`, 400));
     }
-    console.log(membership)
+
 
     membership = await Membership.findByIdAndUpdate(membershipId, newdata, { new: true });
 
@@ -194,26 +194,45 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(`You have not added any membership under you so you can not complete this membership`, 401));
     }
 
-    // can not complete membership because earned amount is less then product amount and days passed are less then product duration
-    if (EA < membership.product.amount && daysElpsed < membership.product.duration) {
+    productAmount = membership.product.amount;
+
+    let canComplete = false;
+
+    if (EA >= productAmount * 0.25 && EA < productAmount * 0.50 && daysElpsed >= 21) {
+        canComplete = true;
+    } else if (EA >= productAmount * 0.50 && EA < productAmount * 0.75 && daysElpsed >= 14) {
+        canComplete = true;
+    } else if (EA >= productAmount * 0.75 && EA < productAmount * 1.00 && daysElpsed >= 7) {
+        canComplete = true;
+    } else if (EA >= productAmount) {
+        canComplete = true;
+    }
+
+    if (!canComplete) {
         return next(new ErrorHandler(`You can not complete this membership because your earned amount is less then product amount and days passed are less then product duration`, 401));
     }
 
-    await Membership.findByIdAndUpdate(membershipId, { status: "complete", referralCode: null })
+    // // can not complete membership because earned amount is less then product amount and days passed are less then product duration
+    // if (EA < membership.product.amount && daysElpsed < membership.product.duration) {
+    //     return next(new ErrorHandler(`You can not complete this membership because your earned amount is less then product amount and days passed are less then product duration`, 401));
+    // }
 
     // Calculate Total amount
-    let totalAmount = EA + membership.product.amount;
+    let totalAmount = EA + productAmount;
 
     // Add bonus amount
-    if (EA >= membership.product.amount) {
-        totalAmount += membership.product.amount
+    if (EA >= productAmount) {
+        totalAmount += productAmount
     }
 
     let wallet = await Wallet.findOne({ userRef: _id });
 
     if (!wallet) {
-        return next(new ErrorHandler(`wallet note found`, 404));
+        return next(new ErrorHandler(`wallet not found`, 404));
     }
+
+    // Increase total amount in wallet.
+    await Wallet.findByIdAndUpdate(wallet._id, { amount: wallet.amount + totalAmount })
 
     // Create a deposit history.
     await Deposit.create({
@@ -224,8 +243,7 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
         walletId: wallet._id
     })
 
-    // Increase total amount in wallet.
-    await Wallet.findByIdAndUpdate(wallet._id, { amount: wallet.amount + totalAmount })
+    await Membership.findByIdAndUpdate(membershipId, { status: "complete", referralCode: null })
 
     res.status(201).json({
         success: true,

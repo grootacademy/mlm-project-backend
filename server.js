@@ -1,12 +1,12 @@
 const dotenv = require("dotenv");
 const connectDb = require("./config/database");
 
-//Hndling uncaught Exception 
-process.on("uncaughtException", (error) => {
-    console.log(`Error:${error.message}`);
-    console.log(`Shutting down the server due to uncaught Exception`);
-    process.exit(1)
-});
+// //Hndling uncaught Exception 
+// process.on("uncaughtException", (error) => {
+//     console.log(`Error:${error.message}`);
+//     console.log(`Shutting down the server due to uncaught Exception`);
+//     process.exit(1)
+// });
 
 //config
 dotenv.config({ path: "config/.env" });
@@ -21,11 +21,11 @@ app.listen(process.env.PORT, () => {
 });
 
 //unhandled promise Rejection
-process.on("unhandledRejection", (error) => {
-    console.log(`Error:${error.message}`);
-    console.log(`Shutting down the server due to unhandled promise Rejection`);
-    server.close(() => {
-        process.exit(1)
-    });
-});
+// process.on("unhandledRejection", (error) => {
+//     console.log(`Error:${error.message}`);
+//     console.log(`Shutting down the server due to unhandled promise Rejection`);
+//     server.close(() => {
+//         process.exit(1)
+//     });
+// });
 

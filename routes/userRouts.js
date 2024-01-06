@@ -15,7 +15,11 @@ const isPasswoard = [
         })
 ];
 
-r.route("/register").post(registerUser);
+const isEmail = [
+    body("email", "Please provide a valid email").isEmail()
+];
+
+r.route("/register").post(isEmail, registerUser);
 r.route("/login").post(loginUser);
 r.route("/logout").get(isAuthenticatedUser, logoutUser);
 r.route("/password/reset").put(isAuthenticatedUser, isPasswoard, resetPassword);

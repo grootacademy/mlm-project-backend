@@ -45,7 +45,7 @@ exports.withdrawalRequest = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler("Withdrawal request not created", 401));
     };
 
-    res.status(201).json(withdrawal);
+    res.status(201).json({ data: withdrawal });
 
 });
 

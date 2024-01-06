@@ -252,6 +252,10 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
 });
 
 async function earnedAmount(membershipId) {
+
+    if (!membershipId) {
+        return 0;
+    }
     // we are assuming this membership exists
     const childMemberships = await Membership.find({ parentMembershipId: membershipId, approvedStatus: "Approved" }).populate("product userRef");
     if (childMemberships.length === 0) {

@@ -9,6 +9,14 @@ const accountDetailsSchema = new mongoose.Schema({
         type: String,
         required: [true, "number is required"],
     },
+    bankName: {
+        type: String,
+        required: [true, "Please provide a valid bankName"],
+    },
+    branch: {
+        type: String,
+        required: [true, "Please provide a valid branch"],
+    },
     ifscCode: {
         type: String,
         required: true

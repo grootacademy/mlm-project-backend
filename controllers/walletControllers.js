@@ -9,12 +9,12 @@ const ErrorHandler = require("../utils/ErrorHandler");
 exports.getuserWallets = catchAsyncError(async (req, res, next) => {
     const { _id, name } = req.user;
 
-    const wallets = await Wallets.findOne({ userRef: _id });
+    const wallet = await Wallets.findOne({ userRef: _id });
 
-    if (!wallets) {
+    if (!wallet) {
         return next(new ErrorHandler(`User ${name}'s wallet not found`, 404));
     }
 
 
-    res.status(200).json({ success: true, data: wallets });
+    res.status(200).json({ success: true, data: wallet });
 });

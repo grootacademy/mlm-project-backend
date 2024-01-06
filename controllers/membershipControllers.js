@@ -240,7 +240,7 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
 
     // Create a deposit history.
     await Deposit.create({
-        totalAmount: totalAmount,
+        amount: totalAmount,
         createdBy: _id,
         source: "membership",
         sourceId: membershipId,

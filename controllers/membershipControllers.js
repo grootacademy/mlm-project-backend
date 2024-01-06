@@ -174,6 +174,10 @@ exports.completeMembership = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(`Membership not found this Id: ${membershipId}`, 404));
     };
 
+    if (membership.approvedStatus !== "Approved") {
+        return next(new ErrorHandler(`Membership is not approved`, 400));
+    }
+
     // Check if memeber ship is completed or not.
     if (membership.status === "complete") {
         return next(new ErrorHandler(`Membership already complete`, 404));
@@ -320,7 +324,7 @@ exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
 
         const id = req.params.id
 
-        const membership = await Membership.findById(id).populate("product userRef").lean();
+        let membership = await Membership.findById(id).populate("product userRef").lean();
 
         if (!membership) {
             return next(new ErrorHandler(`Membership not found this Id: ${id}`, 404));

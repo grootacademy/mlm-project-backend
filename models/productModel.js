@@ -7,10 +7,11 @@ const productSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
-    // duration: {
-    //     type: Number,
-    //     required: [true, "Please enter the product duration"],
-    // },
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     adminRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",

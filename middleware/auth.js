@@ -22,7 +22,9 @@ exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
 //authorizeRoles
 exports.authorizeRoles = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
+        if (null == req?.user?.role) {
+            return next(new ErrorHandler(`Bad request Please login`, 400));
+        } else if (!roles.includes(req.user.role)) {
             return next(new ErrorHandler(`RoleError: ${req.user.role} is note allowed to access this resorce`, 403));
         }
         next();

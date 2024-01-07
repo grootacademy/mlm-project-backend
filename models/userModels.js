@@ -12,20 +12,21 @@ const userSchema = new mongoose.Schema({
         maxLength: [30, "name cannot exceed 30 characters"],
         minLength: [2, "name should have more than and equalsto 2 characters"]
     },
-
+    upiId: {
+        type: String,
+        required: [true, "Please enter your UPI ID"],
+    },
     email: {
         type: String,
         required: [true, "Please enter the Email"],
         unique: true,
         validate: [validator.isEmail, "Please enter a valid Email"]
     },
-
     email: {
         type: String,
         required: [true, "Please enter the Email"],
         unique: true,
     },
-
     password: {
         type: String,
         required: [true, "Please Enter Your Password"],
@@ -41,7 +42,6 @@ const userSchema = new mongoose.Schema({
         default: "user",
     },
     token: String,
-
     createdAt: {
         type: Date,
         required: true,
@@ -56,8 +56,14 @@ userSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
 });
 
+userSchema.path("upiId").validate((value) => {
+    // Define a regular expression pattern for UPI ID
+    var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]+$/;
+    return pattern.test(value);
+}, "Invalid UPI ID");
+
 userSchema.path('phone').validate(function (value) {
-    return value > 999999999;
+    return value > 999999999 && value < 10000000000;
 }, 'Invalid phone number');
 
 

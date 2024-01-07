@@ -15,7 +15,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(result.array()[0].msg, 400));
     }
 
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, upiId } = req.body;
 
     const existEmail = await User.findOne({ email: email.toLowerCase() });
 
@@ -34,6 +34,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         email: email.toLowerCase(),
         password,
         phone: phone,
+        upiId: upiId,
     });
 
     await Wallet.create({

@@ -69,11 +69,20 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
 // get all users (admin only)
 exports.getAllUsers = catchAsyncError(async (req, res, next) => {
 
-    const users = await User.find();
+    let users = await User.find().lean();
+
+    // let totalMemberships = 0;
+    //find perUser total memberships
+    // await Promise.all(users.map(async (user, index) => {
+    //     const totalMembershipsPerUser = await Membership.find({ userRef: user._id }).countDocuments();
+    //     users[index].totalMemberships = totalMembershipsPerUser;
+    //     totalMemberships += totalMembershipsPerUser;
+    // }));
 
     res.status(200).json({
         success: true,
-        users
+        users,
+        // totalMemberships: totalMemberships
     });
 });
 

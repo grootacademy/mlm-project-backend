@@ -8,15 +8,16 @@ const { validationResult } = require("express-validator");
 //register product
 exports.registerProduct = catchAsyncError(async (req, res, next) => {
     const { _id } = req.user
-    const { amount, duration } = req.body;
+    const { amount, duration, name } = req.body;
 
     const existProduct = await Product.find({ amount: amount });
 
     if (existProduct.length > 0 && existProduct[0].amount == amount) {
         return next(new ErrorHandler(`You are creating a duplicate product`, 400))
-    }
+    };
 
     const product = await Product.create({
+        name: name,
         amount: amount,
         duration: duration,
         adminRef: _id,
@@ -55,7 +56,10 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
 //get all products
 exports.getAllProducts = catchAsyncError(async (req, res, next) => {
 
-    const products = await Product.find();
+    let products = await Product.find();
+
+    products.sort((a, b) => b.amount - a.amount);
+
     res.status(200).json({
         products
     });

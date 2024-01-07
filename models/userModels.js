@@ -14,18 +14,13 @@ const userSchema = new mongoose.Schema({
     },
     upiId: {
         type: String,
-        required: [true, "Please enter your UPI ID"],
+        required: [true, "Please enter your valid UPI ID"],
     },
     email: {
         type: String,
         required: [true, "Please enter the Email"],
         unique: true,
         validate: [validator.isEmail, "Please enter a valid Email"]
-    },
-    email: {
-        type: String,
-        required: [true, "Please enter the Email"],
-        unique: true,
     },
     password: {
         type: String,
@@ -35,6 +30,7 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: Number,
+        required: [true, "Please enter your valid phone number"],
         unique: false,
     },
     role: {

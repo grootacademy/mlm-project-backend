@@ -131,6 +131,34 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
     res.status(200).json({ success: true, message: user.name });
 });
 
+//adit user profile
+exports.aditUserProfile = catchAsyncError(async (req, res, next) => {
+    const { _id } = req.user;
+
+    const { name, upiId, email, phone } = req.body;
+
+    const user = await User.findById(_id);
+
+    console.log(user);
+
+    if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+    }
+
+    user.name = name;
+    user.upiId = upiId;
+    user.email = email;
+    user.phone = phone;
+
+    await user.save();
+
+    res.status(201).json({
+        success: true,
+        data: user,
+        message: "User details updated successfully",
+    });
+});
+
 //logout user 
 exports.logoutUser = catchAsyncError(async (req, res, next) => {
     res.cookie("token", null, {

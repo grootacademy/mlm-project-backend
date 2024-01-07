@@ -12,6 +12,10 @@ const productSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
+    upiId: {
+        type: String,
+        required: [true, "Please enter your valid UPI ID"],
+    },
     adminRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",
@@ -22,5 +26,12 @@ const productSchema = mongoose.Schema({
     }
 
 });
+
+productSchema.path("upiId").validate((value) => {
+    // Check if the length of the UPI ID is within the specified range
+    const minUpiIdLength = 10;
+    const maxUpiIdLength = 20;
+    return value.length >= minUpiIdLength && value.length <= maxUpiIdLength;
+}, "Invalid UPI ID");
 
 module.exports = mongoose.model("products", productSchema);

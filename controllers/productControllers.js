@@ -58,7 +58,7 @@ exports.getAllProducts = catchAsyncError(async (req, res, next) => {
 
     let products = await Product.find();
 
-    products.sort((a, b) => b.amount - a.amount);
+    products.sort((a, b) => a.amount - b.amount);
 
     res.status(200).json({
         products

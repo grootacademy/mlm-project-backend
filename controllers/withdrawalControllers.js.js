@@ -158,7 +158,7 @@ exports.getWithdrawalList = catchAsyncError(async (req, res, next) => {
 
     if (approvedStatus) {
 
-        filteredWithdrawals = await Withdrawals.find({ approvedStatus: approvedStatus }).populate("createdBy", "name");
+        filteredWithdrawals = await Withdrawals.find({ approvedStatus: approvedStatus }).populate("createdBy", "name phone");
 
         if (filteredWithdrawals[0] === undefined) {
 
@@ -170,7 +170,7 @@ exports.getWithdrawalList = catchAsyncError(async (req, res, next) => {
 
     } else if (!approvedStatus) {
 
-        withdrawals = await Withdrawals.find().populate("createdBy", "name");
+        withdrawals = await Withdrawals.find().populate("createdBy", "name phone");
 
         if (!withdrawals) {
             return next(new ErrorHandler("withdrawals note found", 400));

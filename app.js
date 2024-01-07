@@ -16,6 +16,7 @@ const Wallet = require("./routes/walletRouts");
 const Withdrawal = require("./routes/withdrawalRouts");
 const Deposit = require("./routes/depositRouts");
 const AccountDetails = require("./routes/accountDetailsRoutes");
+const Admin = require("./routes/adminRoutes");
 
 app.use("/api/v1", user);
 app.use("/api/v1", memberdhip);
@@ -24,6 +25,7 @@ app.use("/api/v1", Wallet);
 app.use("/api/v1", Withdrawal);
 app.use("/api/v1", Deposit);
 app.use("/api/v1", AccountDetails);
+app.use("/api/v1", Admin);
 
 //Middleware for Error
 app.use(ErrorMiddleware);

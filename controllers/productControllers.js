@@ -19,9 +19,9 @@ exports.registerProduct = catchAsyncError(async (req, res, next) => {
     const product = await Product.create({
         name: name,
         amount: amount,
+        upiId: upiId,
         duration: duration,
         adminRef: _id,
-        upiId: upiId,
     });
 
     res.status(200).json({

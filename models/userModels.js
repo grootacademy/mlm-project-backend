@@ -56,11 +56,11 @@ userSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
 });
 
-userSchema.path("upiId").validate((value) => {
-    // Define a regular expression pattern for UPI ID
-    var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]+$/;
-    return pattern.test(value);
-}, "Invalid UPI ID");
+// userSchema.path("upiId").validate((value) => {
+//     // Define a regular expression pattern for UPI ID
+//     var pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]+$/;
+//     return pattern.test(value);
+// }, "Invalid UPI ID");
 
 userSchema.path('phone').validate(function (value) {
     return value > 999999999 && value < 10000000000;

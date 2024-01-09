@@ -16,6 +16,7 @@ const app = require("./app");
 //Connect to Database
 connectDb();
 
+
 const server = app.listen(process.env.PORT, () => {
     console.log(`server is working on http://localhost:${process.env.PORT}`);
 });

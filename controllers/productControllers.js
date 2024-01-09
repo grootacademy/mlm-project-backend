@@ -8,7 +8,7 @@ const { validationResult } = require("express-validator");
 //register product
 exports.registerProduct = catchAsyncError(async (req, res, next) => {
     const { _id } = req.user
-    const { amount, duration, name, upiId } = req.body;
+    const { amount, duration, name, upiId, description } = req.body;
 
     const existProduct = await Product.find({ amount: amount });
 
@@ -20,6 +20,7 @@ exports.registerProduct = catchAsyncError(async (req, res, next) => {
         name: name,
         amount: amount,
         upiId: upiId,
+        description: description,
         duration: duration,
         adminRef: _id,
     });

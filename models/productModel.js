@@ -16,6 +16,10 @@ const productSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter your valid UPI ID"],
     },
+    description: {
+        type: String,
+        required: [true, "Please enter your product description"],
+    },
     adminRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "users",

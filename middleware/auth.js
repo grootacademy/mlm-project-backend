@@ -4,8 +4,9 @@ const User = require("../models/userModels");
 const ErrorHandler = require("../utils/ErrorHandler");
 
 exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
-    const { token } = req.cookies;
+    const token = req.headers.authorization;
 
+    console.log("token", token)
 
     if (!token) {
         return next(new ErrorHandler("Please login to access this resource", 401))

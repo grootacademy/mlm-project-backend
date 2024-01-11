@@ -75,7 +75,7 @@ exports.getAccount = catchAsyncError(async (req, res, next) => {
 
 
     // if (id) {
-    account = await AccountDetails.findOne({ _id: id });
+    // account = await AccountDetails.findOne({ _id: id });
     // }
 
     if (!account) {

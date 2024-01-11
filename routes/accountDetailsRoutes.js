@@ -17,7 +17,7 @@ const requireId = [
 
 r.route("/create/accountDetails").post(isAuthenticatedUser, submitteAccountDetails);
 r.route("/account/update/:id").put(isAuthenticatedUser, requireId, updateAccountDetails);
-r.route("/getAccount/:id?").get(isAuthenticatedUser, isValidId, getAccount);
+r.route("/getAccount").get(isAuthenticatedUser, isValidId, getAccount);
 
 r.route("/getAllAccounts/:id?").get(isAuthenticatedUser, authorizeRoles("admin"), isValidId, getAllAccounts);
 

@@ -1,7 +1,7 @@
 const express = require("express");
-const { requestMembership, approvalOfMembership, completeMembership, getAllMemberships, getAllMembershipsForAdmin, rejectMembership, getMembershipDetails } = require("../controllers/membershipControllers");
+const { requestMembership, approvalOfMembership, completeMembership, getAllMemberships, getAllMembershipsForAdmin, rejectMembership, getMembershipDetails, getUserMemberships, getSingalMembershipDetails } = require("../controllers/membershipControllers");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 const r = express.Router();
 
 const membershipRequest = [
@@ -19,6 +19,10 @@ const isApprovedStatus = [
     body("approvedStatus", "Please provide a valid approvedStatus").optional().isIn(["Pending", "Approved", "Rejected"])
 ];
 
+const isParamsId = [
+    param("id", "Please provide a valid ID in param").matches(/^[0-9a-fA-F]{24}$/),
+]
+
 r.route("/memberdhip/request").post(isAuthenticatedUser, membershipRequest, requestMembership);
 r.route("/membership/approval").put(isAuthenticatedUser, authorizeRoles("admin"), isMembershipId, approvalOfMembership);
 r.route("/membership/complete").put(isAuthenticatedUser, isMembershipId, completeMembership);
@@ -26,6 +30,11 @@ r.route("/membership/complete").put(isAuthenticatedUser, isMembershipId, complet
 r.route("/membership/rejecte").put(isAuthenticatedUser, authorizeRoles("admin"), isMembershipId, rejectMembership);
 
 r.route("/membership/getMemberships").get(isAuthenticatedUser, authorizeRoles("admin"), isApprovedStatus, getAllMembershipsForAdmin);
+
+////////////////////////////////////////////////////////////////
+r.route("/membership/getUserMemberships/:id").get(isAuthenticatedUser, authorizeRoles("admin"), isParamsId, getUserMemberships);
+r.route("/membership/getSingalMembershipDetails/:id").get(isAuthenticatedUser, authorizeRoles("admin"), isParamsId, getSingalMembershipDetails)
+////////////////////////////////////////////////////////////////
 
 r.route("/memberships/user").get(isAuthenticatedUser, isApprovedStatus, getAllMemberships);
 r.route("/membership/:id").get(isAuthenticatedUser, isApprovedStatus, getMembershipDetails);

@@ -302,7 +302,7 @@ exports.getAllMemberships = catchAsyncError(async (req, res, next) => {
             return membership;
         })
 
-        memberships = await Promise.all(memberships)
+        memberships = await Promise.all(memberships);
         // addMemberCountToArray(memberships)
 
         res.status(200).json(memberships);
@@ -336,7 +336,7 @@ exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
             membership.deposit = deposit;
         }
 
-        
+
 
         // Add earned amount in this membership
         membership = { ...membership, ...await earnedAmount(id) }
@@ -351,7 +351,7 @@ exports.getMembershipDetails = catchAsyncError(async (req, res, next) => {
     }
 });
 
-//get all memberships (user)
+//get all memberships (admin only)
 exports.getAllMembershipsForAdmin = catchAsyncError(async (req, res, next) => {
 
     try {
@@ -367,4 +367,65 @@ exports.getAllMembershipsForAdmin = catchAsyncError(async (req, res, next) => {
         console.log(error)
         res.status(500).json({ message: error.message })
     }
+});
+
+//get singal user memberships (admin only)
+exports.getUserMemberships = catchAsyncError(async (req, res, next) => {
+
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    };
+
+    const { id } = req.params;
+
+    let memberships;
+
+    memberships = await Membership.find({ userRef: id }).populate({ path: "product", options: { lean: true } }).lean();
+
+
+    memberships = memberships.map(async (membership, i) => {
+        let count = await Membership.find({ parentMembershipId: membership._id }).countDocuments();
+        membership.addedMembers = count;
+        return membership;
+    });
+
+    memberships = await Promise.all(memberships);
+
+    res.status(200).json(memberships);
+});
+
+//get singal membership all detail (admin only)
+exports.getSingalMembershipDetails = catchAsyncError(async (req, res, next) => {
+
+
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        return res.send({ errors: result.array() });
+    };
+
+    const id = req.params.id
+
+    let membership = await Membership.findById(id).populate("product userRef").lean();
+
+    if (!membership) {
+        return next(new ErrorHandler(`Membership not found this Id: ${id}`, 404));
+    };
+
+    let deposit = await Deposit.findOne({ sourceId: id, source: "membership" })
+
+    if (deposit) {
+        membership.deposit = deposit;
+    }
+
+
+
+    // Add earned amount in this membership
+    membership = { ...membership, ...await earnedAmount(id) }
+
+    // Add total member added in this membership
+    membership.addedMembers = await Membership.find({ parentMembershipId: membership._id }).countDocuments();
+
+    res.status(200).json(membership);
 });

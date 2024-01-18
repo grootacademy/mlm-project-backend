@@ -69,14 +69,14 @@ exports.getAccount = catchAsyncError(async (req, res, next) => {
         return next(new ErrorHandler(result.array()[0].msg, 400))
     }
 
-    const { id } = req.params;
+    // const { id } = req.params;
 
     let account = await AccountDetails.find({ createdBy: _id });
 
 
-    if (id) {
-        account = await AccountDetails.findOne({ _id: id });
-    }
+    // if (id) {
+    // account = await AccountDetails.findOne({ _id: id });
+    // }
 
     if (!account) {
         return next(new ErrorHandler("Account not found", 404));

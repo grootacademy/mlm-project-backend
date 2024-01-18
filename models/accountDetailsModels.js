@@ -21,14 +21,6 @@ const accountDetailsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    accountType: {
-        type: String,
-        required: true
-    },
-    phoneNo: {
-        type: Number,
-        required: [true, "number is required"],
-    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
@@ -49,9 +41,9 @@ accountDetailsSchema.path("accountNumber").validate((accountNumber) => {
     return accountRegex.test(accountNumber);
 }, "Invalid account number");
 
-accountDetailsSchema.path("phoneNo").validate((phoneNo) => {
-    return phoneNo > 999999999;
-}, "Invalid phoneNo");
+// accountDetailsSchema.path("phoneNo").validate((phoneNo) => {
+//     return phoneNo > 999999999;
+// }, "Invalid phoneNo");
 
 
 
